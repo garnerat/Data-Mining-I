@@ -66,4 +66,27 @@ plot(subset_result, scale = "bic")
 # filled in black rectangles are variables included in the model
 #BIC: smaller is better, this plot starts with largest value (worst) at the bottom
 
+#Forward/Backward/Stepwise Regression Using AIC
+
+#define starting points - full model and null model
+
+nullmodel = lm(medv ~ 1, data = train)
+fullmodel = lm(medv ~ ., data = train)
+
+#backward
+model.step = step(fullmodel, direction = "backward")
+
+#backward with BIC
+n<-nrow(train)
+model.step = step(fullmodel, direction = "backward",k=log(n)) # for BIC use k=log(n) display of data will still say "AIC" but it is BIC
+
+#forward
+model.step = step(nullmodel, scope = list(lower = nullmodel, upper = fullmodel)
+                  , direction = "forward")
+
+# stepwise
+model.step = step(nullmodel, scope = list(lower = nullmodel, upper = fullmodel) 
+                  , direction = "both")
+
+#under each model the list of variables ranked by AIC that were available to add/subtract in the next iteration (depening on selection method)
 
